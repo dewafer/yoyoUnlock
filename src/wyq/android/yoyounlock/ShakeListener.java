@@ -28,7 +28,7 @@ public class ShakeListener implements SensorEventListener {
 	public static final int X = 0;
 	public static final int Y = 1;
 	public static final int Z = 2;
-	public static final int MIN_ACCELERATION = 10;
+	public static final int MIN_ACCELERATION = 8;
 	public static final long MAX_SHAKE_SEPARATION = 900; // milli
 	public static final int NUM_OF_SHAKES = 3;
 
