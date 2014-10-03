@@ -3,6 +3,7 @@ package wyq.android.yoyounlock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 
 /**
  * 这个家伙应该能处理开机自动启动。
@@ -18,8 +19,13 @@ public class YoyoStartupReceiver extends BroadcastReceiver {
 		// This method is called when the BroadcastReceiver is receiving
 		// an Intent broadcast.
 		// throw new UnsupportedOperationException("Not yet implemented");
-		Intent start = new Intent(context, ShakeDetector.class);
-		context.startService(start);
+		boolean autoStartup = PreferenceManager.getDefaultSharedPreferences(
+				context).getBoolean(
+				context.getString(R.string.auto_startup_key), true);
+		if (autoStartup) {
+			Intent start = new Intent(context, ShakeDetector.class);
+			context.startService(start);
+		}
 
 	}
 

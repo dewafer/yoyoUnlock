@@ -1,7 +1,6 @@
 package wyq.android.yoyounlock;
 
 import wyq.android.yoyounlock.ShakeDetector.LocalBinder;
-import wyq.android.yoyounlock.tool.ListSensors;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,12 +13,12 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.Switch;
 
 /**
@@ -45,9 +44,8 @@ public class MainActivity extends Activity implements OnClickListener,
 		switchBtn = (Switch) findViewById(R.id.shakeSwitch);
 		switchBtn.setOnClickListener(this);
 
-		// 列粗所有感应器按钮，暂时隐藏掉
-		Button button1 = (Button) findViewById(R.id.button1);
-		button1.setOnClickListener(this);
+		// 第一次启动时，设置默认值
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 	}
 
@@ -62,14 +60,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-
-		if (v.getId() == R.id.button1) {
-			// 暂时隐藏的列出所有感应器按钮
-			// 点了之后会启动ListSensors
-			Intent intent = new Intent(this, ListSensors.class);
-			startActivity(intent);
-			return;
-		}
 
 		Intent service = new Intent(this, ShakeDetector.class);
 		boolean isChecked = switchBtn.isChecked();
@@ -130,6 +120,10 @@ public class MainActivity extends Activity implements OnClickListener,
 		case R.id.itemReportIssue:
 			url = "https://github.com/dewafer/yoyoUnlock/issues";
 			confirmFireMissiles("请访问这个网址报告错误：" + url, url);
+			return true;
+		case R.id.itemSettings:
+			Intent settings = new Intent(this, SettingsActivity.class);
+			startActivity(settings);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

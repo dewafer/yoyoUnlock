@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="wyq.android.yoyounlock"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="0.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -41,6 +41,9 @@
         <activity
             android:name=".tool.ListSensors"
             android:label="@string/title_activity_other" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="wyq.android.yoyounlock.SettingsActivity" />
         </activity>
 
         <receiver android:name=".YoyoStartupReceiver" >
@@ -50,8 +53,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-    </application>
 
-    <uses-permission android:name="android.permission.VIBRATE" />
+        <activity android:name=".SettingsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="wyq.android.yoyounlock.MainActivity" />
+        </activity>
+        <activity
+            android:name=".tool.ShakeTesterActivity"
+            android:label="@string/title_activity_shake_tester" >
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="wyq.android.yoyounlock.SettingsActivity"/>
+        </activity>
+    </application>
 
 </manifest>

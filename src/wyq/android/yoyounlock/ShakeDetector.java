@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,11 +20,14 @@ import android.widget.Toast;
  */
 public class ShakeDetector extends Service implements ShakeHandler {
 
+	public static final String EXTRA_START_FLAG_NO_NOTIFICATION = "wyq.android.yoyounlock.ShakeDetector.EXTRA_START_FLAG_NO_NOTIFICATION";
+
 	private static final String TAG = "ShakeDetector";
 	private ShakeListener mShakeListener;
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 	private boolean started;
+	private boolean requireNotify;
 
 	// Binder given to clients
 	private final IBinder mBinder = new LocalBinder();
@@ -37,11 +41,21 @@ public class ShakeDetector extends Service implements ShakeHandler {
 			Log.d(TAG, "ShakeDetector.start:" + started);
 			if (started) {
 
-				ShakeDetectorNotification.notify(this, "唤醒已启动");
+				if (intent == null) {
+					requireNotify = false;
+				} else {
+					boolean donotNotify = intent.getBooleanExtra(
+							EXTRA_START_FLAG_NO_NOTIFICATION, false);
+					requireNotify = !donotNotify;
+				}
 
-				Toast.makeText(this,
-						R.string.shakeDetector_service_started_notice,
-						Toast.LENGTH_SHORT).show();
+				if (requireNotify) {
+					ShakeDetectorNotification.notify(this, "唤醒已启动");
+
+					Toast.makeText(this,
+							R.string.shakeDetector_service_started_notice,
+							Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
 		return super.onStartCommand(intent, flags, startId);
@@ -52,7 +66,10 @@ public class ShakeDetector extends Service implements ShakeHandler {
 		super.onCreate();
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		mShakeListener = new ShakeListener(this);
+
+		mShakeListener = new ShakeListener(this, this);
+		PreferenceManager.getDefaultSharedPreferences(this)
+				.registerOnSharedPreferenceChangeListener(mShakeListener);
 	}
 
 	@Override
@@ -62,11 +79,15 @@ public class ShakeDetector extends Service implements ShakeHandler {
 			mSensorManager.unregisterListener(mShakeListener);
 			started = false;
 			Log.d(TAG, "ShakeDetector.stopped(started=" + started + ")");
-			Toast.makeText(getApplicationContext(),
-					R.string.shakeDetector_service_stopped_notice,
-					Toast.LENGTH_SHORT).show();
+			if (requireNotify) {
+				Toast.makeText(getApplicationContext(),
+						R.string.shakeDetector_service_stopped_notice,
+						Toast.LENGTH_SHORT).show();
+			}
 			ShakeDetectorNotification.cancel(this);
 		}
+		PreferenceManager.getDefaultSharedPreferences(this)
+				.unregisterOnSharedPreferenceChangeListener(mShakeListener);
 		super.onDestroy();
 	}
 

@@ -10,7 +10,9 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -35,7 +37,21 @@ public class ListSensors extends ListActivity {
 		allSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
 
 		// Use our own list adapter
-		setListAdapter(new SpeechListAdapter(this));
+		setListAdapter(new SensorListAdapter(this));
+
+		// To enable the app icon as an Up button, call
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		// Respond to the action bar's Up/Home button
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**
@@ -43,8 +59,8 @@ public class ListSensors extends ListActivity {
 	 * text.
 	 * 
 	 */
-	private class SpeechListAdapter extends BaseAdapter {
-		public SpeechListAdapter(Context context) {
+	private class SensorListAdapter extends BaseAdapter {
+		public SensorListAdapter(Context context) {
 			mContext = context;
 		}
 
@@ -98,11 +114,16 @@ public class ListSensors extends ListActivity {
 					.findViewById(R.id.sensorNameTextView);
 			TextView sensorType = (TextView) v
 					.findViewById(R.id.sensorTypetextView);
+			TextView sensorVendor = (TextView) v
+					.findViewById(R.id.sensorVendorTextView);
 
 			Sensor sensor = allSensors.get(position);
 
 			sensorName.setText(sensor.getName());
 			sensorType.setText(findSensorTypeName(sensor.getType()));
+			sensorVendor.setText(sensor.getVendor());
+
+			v.setClickable(false);
 
 			return v;
 		}
@@ -134,5 +155,4 @@ public class ListSensors extends ListActivity {
 			return "Unknown";
 		}
 	}
-
 }
