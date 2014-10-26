@@ -12,6 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
+        android:onClick="onClick"
         android:text="@string/shake_switch_text" />
 
 </RelativeLayout>

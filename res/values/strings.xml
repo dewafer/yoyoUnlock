@@ -28,9 +28,17 @@
     <string name="seek_bar_preference_title">摇晃探测阈值</string>
     <string name="seek_bar_preference_key">wyq.android.yoyounlock.ShakeListener#MIN_ACCELERATION</string>
     <string name="seek_bar_preference_warning_txt">警告：除非您知道自己在修改什么，否则请勿随意改动该值！</string>
-    <string name="use_custom_def_key">USE_wyq.android.yoyounlock.ShakeListener#MIN_ACCELERATIONwyq.android.yoyounlock.ShakeListener#MIN_ACCELERATION</string>
+    <string name="use_custom_def_key">USE_wyq.android.yoyounlock.ShakeListener#MIN_ACCELERATION</string>
     <string name="use_custom_def_title">使用自定义摇晃探测阈值</string>
     <string name="use_custom_def_summary_off">请勿随意改动该值</string>
-     <string name="use_custom_def_summary_on">使用自定义摇晃探测阈值</string>
+    <string name="use_custom_def_summary_on">使用自定义摇晃探测阈值</string>
+    <string name="reset_default_settings">恢复默认设定</string>
+    <string name="reset_default_settings_title">恢复默认设定</string>
+    <string name="reset_default_settings_message">确认使用默认的摇晃阈值吗？</string>
+    <string name="title_activity_reset_default_settings">ResetDefaultSettingsActivity</string>
+    <string name="keep_wake_def_key">wyq.android.yoyounlock.ShakeListener#wakeLock</string>
+    <string name="keep_wake_def_title">锁屏后强制激活</string>
+    <string name="keep_wake_def_summary_off">如无法唤醒，请激活该选项</string>
+    <string name="keep_wake_def_summary_on">强制激活将会消耗更多电池</string>
 
 </resources>

@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
@@ -34,8 +35,14 @@ public class SeekBarPreferences extends DialogPreference implements
 
 	@Override
 	public CharSequence getSummary() {
-		return getContext().getString(R.string.seek_bar_preference_summary,
+
+		int realValue = PreferenceManager.getDefaultSharedPreferences(
+				getContext()).getInt(
+				getContext().getString(R.string.seek_bar_preference_key),
 				getIntValue());
+
+		return getContext().getString(R.string.seek_bar_preference_summary,
+				realValue);
 	}
 
 	@Override
@@ -67,6 +74,13 @@ public class SeekBarPreferences extends DialogPreference implements
 	@Override
 	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
+
+		int realValue = PreferenceManager.getDefaultSharedPreferences(
+				getContext()).getInt(
+				getContext().getString(R.string.seek_bar_preference_key),
+				getIntValue());
+
+		setIntValue(realValue);
 
 		mSeekbar = (SeekBar) view.findViewById(R.id.seek_bar);
 		mSeekbar.setProgress(getIntValue());

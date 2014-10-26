@@ -1,18 +1,20 @@
 package wyq.android.yoyounlock;
 
+import wyq.android.yoyounlock.tool.SeekBarPreferences;
 import android.app.Activity;
-//import android.content.SharedPreferences;
-//import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-//import android.preference.PreferenceManager;
-//import android.util.Log;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class SettingsActivity extends Activity {
 
-//	private OnSharedPreferenceChangeListener listener;
+	private OnSharedPreferenceChangeListener listener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +24,12 @@ public class SettingsActivity extends Activity {
 		getFragmentManager().beginTransaction()
 				.replace(android.R.id.content, settings).commit();
 
-//		listener = new SettingsChangeListener();
-		
+		listener = settings;
+
 		// To enable the app icon as an Up button, call
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -43,38 +45,44 @@ public class SettingsActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
-//		PreferenceManager.getDefaultSharedPreferences(this)
-//				.registerOnSharedPreferenceChangeListener(listener);
+		PreferenceManager.getDefaultSharedPreferences(this)
+				.registerOnSharedPreferenceChangeListener(listener);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-//		PreferenceManager.getDefaultSharedPreferences(this)
-//				.unregisterOnSharedPreferenceChangeListener(listener);
+		PreferenceManager.getDefaultSharedPreferences(this)
+				.unregisterOnSharedPreferenceChangeListener(listener);
 	}
 
-	public static class SettingsFragment extends PreferenceFragment {
+	public static class SettingsFragment extends PreferenceFragment implements
+			OnSharedPreferenceChangeListener {
+
+		private PreferenceScreen preferenceScreen;
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preferences);
+
+			preferenceScreen = getPreferenceScreen();
+		}
+
+		@Override
+		public void onSharedPreferenceChanged(
+				SharedPreferences sharedPreferences, String key) {
+			Log.d(TAG, "p=" + sharedPreferences.toString() + " nv=" + key);
+
+			SeekBarPreferences seekBarPref = (SeekBarPreferences) preferenceScreen
+					.findPreference(getString(R.string.seek_bar_preference_key));
+			seekBarPref.setSummary(seekBarPref.getSummary());
+
 		}
 
 	}
 
-//	private static final String TAG = "SettingsActivity";
-
-//	class SettingsChangeListener implements OnSharedPreferenceChangeListener {
-//
-//		@Override
-//		public void onSharedPreferenceChanged(
-//				SharedPreferences sharedPreferences, String key) {
-//			Log.d(TAG, "p=" + sharedPreferences.toString() + " nv=" + key);
-//		}
-//
-//	}
+	private static final String TAG = "SettingsActivity";
 
 }

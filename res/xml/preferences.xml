@@ -8,13 +8,29 @@
             android:summaryOff="@string/auto_startup_off_pref_sum"
             android:summaryOn="@string/auto_startup_on_pref_sum"
             android:title="@string/auto_startup_name" />
-        <CheckBoxPreference android:defaultValue="false" android:title="@string/use_custom_def_title" android:key="@string/use_custom_def_key" android:summaryOff="@string/use_custom_def_summary_off" android:summaryOn="@string/use_custom_def_summary_on"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/use_custom_def_key"
+            android:summaryOff="@string/use_custom_def_summary_off"
+            android:summaryOn="@string/use_custom_def_summary_on"
+            android:title="@string/use_custom_def_title" />
 
         <wyq.android.yoyounlock.tool.SeekBarPreferences
             android:defaultValue="14"
             android:dependency="@string/use_custom_def_key"
             android:key="@string/seek_bar_preference_key"
             android:title="@string/seek_bar_preference_title" />
+
+        <wyq.android.yoyounlock.tool.ResetDefaultSettingsPreference
+            android:dependency="@string/use_custom_def_key"
+            android:title="@string/reset_default_settings" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/keep_wake_def_key"
+            android:summaryOff="@string/keep_wake_def_summary_off"
+            android:summaryOn="@string/keep_wake_def_summary_on"
+            android:title="@string/keep_wake_def_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_name_debug_tools" >
         <Preference android:title="@string/list_all_sensors" >

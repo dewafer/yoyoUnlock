@@ -59,10 +59,17 @@ public final class R {
         public static final int auto_startup_on_pref_sum=0x7f06000b;
         public static final int hello_world=0x7f060013;
         public static final int issue_menu_item_text=0x7f060008;
+        public static final int keep_wake_def_key=0x7f060023;
+        public static final int keep_wake_def_summary_off=0x7f060025;
+        public static final int keep_wake_def_summary_on=0x7f060026;
+        public static final int keep_wake_def_title=0x7f060024;
         public static final int list_all_sensors=0x7f060011;
         public static final int open=0x7f06000a;
         public static final int pref_header_name_common_settings=0x7f06000f;
         public static final int pref_header_name_debug_tools=0x7f060010;
+        public static final int reset_default_settings=0x7f06001f;
+        public static final int reset_default_settings_message=0x7f060021;
+        public static final int reset_default_settings_title=0x7f060020;
         public static final int seek_bar_preference_key=0x7f060019;
         public static final int seek_bar_preference_summary=0x7f060017;
         public static final int seek_bar_preference_title=0x7f060018;
@@ -77,6 +84,7 @@ public final class R {
         public static final int test_axis_view_text=0x7f060015;
         public static final int test_use_gravity_filter=0x7f060016;
         public static final int title_activity_other=0x7f060001;
+        public static final int title_activity_reset_default_settings=0x7f060022;
         public static final int title_activity_shake_tester=0x7f060012;
         public static final int use_custom_def_key=0x7f06001b;
         public static final int use_custom_def_summary_off=0x7f06001d;

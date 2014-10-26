@@ -36,6 +36,7 @@ public class ShakeDetector extends Service implements ShakeHandler {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// 服务器动啦～
 		if (!started) {
+			mShakeListener.onStart();
 			started = mSensorManager.registerListener(mShakeListener, mSensor,
 					SensorManager.SENSOR_DELAY_UI);
 			Log.d(TAG, "ShakeDetector.start:" + started);
@@ -77,6 +78,7 @@ public class ShakeDetector extends Service implements ShakeHandler {
 		// 服务停止，再见！
 		if (started) {
 			mSensorManager.unregisterListener(mShakeListener);
+			mShakeListener.onStop();
 			started = false;
 			Log.d(TAG, "ShakeDetector.stopped(started=" + started + ")");
 			if (requireNotify) {

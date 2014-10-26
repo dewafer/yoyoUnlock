@@ -6,6 +6,8 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -30,6 +32,7 @@ public class ShakeListener implements SensorEventListener,
 	private int mNumShakes = 0;
 	private long mFirstShake = 0;
 	private int mThresholdAxis = -1;
+	private WakeLock mWakeLock;
 
 	private ShakeHandler mShakeInterface;
 	private Context mContext;
@@ -45,25 +48,33 @@ public class ShakeListener implements SensorEventListener,
 	public ShakeListener(ShakeHandler shakeInterface, Context context) {
 		this.mShakeInterface = shakeInterface;
 		this.mContext = context;
-		ShakeListener.updateMinAcceleration(context);
 	}
 
-	public static int updateMinAcceleration(Context context) {
+	public void onStart() {
+		updateMinAcceleration(mContext);
+		keepWake();
+	}
 
-		String useCustomKey = context.getString(R.string.use_custom_def_key);
-		String key = context.getString(R.string.seek_bar_preference_key);
-
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-
-		if (preferences.getBoolean(useCustomKey, false)) {
-			ShakeListener.MIN_ACCELERATION = preferences.getInt(key,
-					MIN_ACCELERATION_DEFAULT);
-		} else {
-			ShakeListener.MIN_ACCELERATION = ShakeListener.MIN_ACCELERATION_DEFAULT;
+	public void onStop() {
+		if (mWakeLock != null) {
+			mWakeLock.release();
+			mWakeLock = null;
 		}
+	}
 
-		return ShakeListener.MIN_ACCELERATION;
+	private void keepWake() {
+		boolean isKeepWake = PreferenceManager.getDefaultSharedPreferences(
+				mContext).getBoolean(
+				mContext.getString(R.string.keep_wake_def_key), false);
+
+		if (isKeepWake) {
+			PowerManager powerManager = (PowerManager) mContext
+					.getSystemService(Context.POWER_SERVICE);
+			mWakeLock = powerManager.newWakeLock(
+					PowerManager.PARTIAL_WAKE_LOCK, TAG);
+			mWakeLock.setReferenceCounted(false);
+			mWakeLock.acquire();
+		}
 	}
 
 	@Override
@@ -191,8 +202,39 @@ public class ShakeListener implements SensorEventListener,
 		String useCustomKey = mContext.getString(R.string.use_custom_def_key);
 
 		if (minAccerKey.equals(key) || useCustomKey.equals(key)) {
-			ShakeListener.updateMinAcceleration(mContext);
+			updateMinAcceleration(mContext);
 		}
 
+		String keepWakeKey = mContext.getString(R.string.keep_wake_def_key);
+		if (keepWakeKey.equals(key)) {
+			if (sharedPreferences.getBoolean(
+					mContext.getString(R.string.keep_wake_def_key), false)) {
+				keepWake();
+			} else {
+				if (mWakeLock != null) {
+					mWakeLock.release();
+					mWakeLock = null;
+				}
+			}
+		}
+
+	}
+
+	public static int updateMinAcceleration(Context context) {
+
+		String useCustomKey = context.getString(R.string.use_custom_def_key);
+		String key = context.getString(R.string.seek_bar_preference_key);
+
+		SharedPreferences preferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+
+		if (preferences.getBoolean(useCustomKey, false)) {
+			ShakeListener.MIN_ACCELERATION = preferences.getInt(key,
+					MIN_ACCELERATION_DEFAULT);
+		} else {
+			ShakeListener.MIN_ACCELERATION = ShakeListener.MIN_ACCELERATION_DEFAULT;
+		}
+
+		return ShakeListener.MIN_ACCELERATION;
 	}
 }

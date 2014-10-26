@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Switch;
 
 /**
@@ -28,8 +27,7 @@ import android.widget.Switch;
  * @author dewafer
  * 
  */
-public class MainActivity extends Activity implements OnClickListener,
-		ServiceConnection {
+public class MainActivity extends Activity implements ServiceConnection {
 
 	protected ShakeDetector mService;
 	private Switch switchBtn;
@@ -42,7 +40,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// 开关按钮，刚起来的时候先禁用掉
 		switchBtn = (Switch) findViewById(R.id.shakeSwitch);
-		switchBtn.setOnClickListener(this);
 
 		// 第一次启动时，设置默认值
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -58,7 +55,6 @@ public class MainActivity extends Activity implements OnClickListener,
 		bindService(intent, this, Context.BIND_AUTO_CREATE);
 	}
 
-	@Override
 	public void onClick(View v) {
 
 		Intent service = new Intent(this, ShakeDetector.class);

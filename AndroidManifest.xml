@@ -62,7 +62,9 @@
         <activity
             android:name=".tool.ShakeTesterActivity"
             android:label="@string/title_activity_shake_tester" >
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="wyq.android.yoyounlock.SettingsActivity"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="wyq.android.yoyounlock.SettingsActivity" />
         </activity>
     </application>
 
